@@ -27,8 +27,8 @@ def lambda_handler(event, context):
                 result.append((title, link))
 
     # telegram message sending
-    api_key = '5251720307:AAEioDUzN6YsqRYE034soQq8N3-DJ8BSX28'
-    chat_id = 1413972042
+    api_key = ''
+    chat_id = 0
     my_bot = telegram.Bot(api_key)
 
     message = f'명지대학교 컴퓨터공학과 홈페이지\n{datetime.today().strftime("%Y/%m/%d")} 새 글'
