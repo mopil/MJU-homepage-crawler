@@ -10,8 +10,8 @@ from bs4 import BeautifulSoup
 import schedule
 
 storage = []
-api_key = '5251720307:AAEioDUzN6YsqRYE034soQq8N3-DJ8BSX28'
-chat_id = 1413972042
+api_key = ''
+chat_id = ''
 
 prefix_url = 'http://jw4.mju.ac.kr/user/'
 
