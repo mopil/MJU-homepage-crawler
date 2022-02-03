@@ -15,4 +15,22 @@ https://t.me/yu_homepage_crawler
 
 필요하신 분 사용하세요.
 
+<br>
+
+## AWS Lambda 파이썬 모듈
+
+람다로 배포 시 계층 추가에 필요한 크롤링 모듈을 공유합니다.
+
+[bs4 + datetime] <br>
+https://drive.google.com/file/d/1od3WdWZHd04YOMDUlGj0wDJLllxiNgUd/view?usp=sharing
+
+[telegram-bot] <br>
+https://drive.google.com/file/d/11zDHuuX0W8E8dNk-jRr1Mxqt94Kj1T3j/view?usp=sharing
+
+[requests] <br>
+https://drive.google.com/file/d/1mNxUKmsUa8fAn1a7OL4DNEzOGq3C2sGL/view?usp=sharing
+
+[selenium] <br>
+https://github.com/inahjeon/AWS-LAMBDA-LAYER-Selenium <br>
+*셀레늄은 크롬 드라이버 적용 때문에 별도 작업 필요. 깃허브 링크를 첨부합니다.
 
