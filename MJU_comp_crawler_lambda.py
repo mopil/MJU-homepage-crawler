@@ -27,7 +27,7 @@ def lambda_handler(event, context):
                 result.append((title, link))
     
     # telegram message sending
-    api_key = '5251720307:AAEioDUzN6YsqRYE034soQq8N3-DJ8BSX28'
+    api_key = ''
     chat_id = '@mju_computer_crawling' #1413972042 #my_bot
     my_bot = telegram.Bot(api_key)
     
