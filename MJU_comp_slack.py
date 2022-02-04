@@ -33,7 +33,7 @@ def lambda_handler(event, context):
     else:
         for a in result:
             message += f'\n{a[0]}\n{a[1]}'
-    token = 'xoxb-2901743260471-3055750016835-hOj09tLdbXky7V9WsWnYhmLh'
+    token = ''
     channal = '#컴퓨터공학과'
 
     response = requests.post("https://slack.com/api/chat.postMessage",
