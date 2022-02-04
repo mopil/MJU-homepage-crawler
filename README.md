@@ -1,13 +1,13 @@
-# 명지대 컴공과 새 글 알리미
+# 명지대 컴공과, 학사공지 새 글 알리미
 
-https://t.me/mju_computer_crawling
+https://join.slack.com/t/mju-announcement/shared_invite/zt-116ev5q5x-xh17tlTvbAl_4Bb8n~Jxwg
 
 매일 오후 3시, 컴공과 홈페이지에서 new 태그가 붙은 글들을 가져와서 알려줍니다.
 
 new 이미지가 하루가 지나도 남아있는데, 그래서 중복으로 가져올 수도 있습니다.
 
-학사 공지도 가져오도록 기능을 추가했습니다.
-
+22.02.03 학사 공지도 가져오도록 기능을 추가
+22.02.04 메시지 플랫폼 이전 : telegram -> Slack
 
 ## 번외) 영남대 학사공지, 경제금융학과, 회계세무학과 새 글 알리미
 
