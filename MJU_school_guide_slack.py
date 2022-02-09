@@ -31,8 +31,10 @@ def crawling_school_notice(url):
         if "새글" in title:
             result.append([title, link])
     pattern = datetime.today().strftime("%Y.%m")
+
     i = 0
     for tag in soup.select('._artclTdRdate'):
+        if i >= len(result): break
         if pattern in str(tag):
             result[i].append(tag.text)
             i += 1
@@ -55,10 +57,11 @@ result_list = []
 for url in url_list.values():
     result_list.append(crawling_school_notice(url))
 total_message = f'{datetime.today().strftime("%Y-%m-%d")} 명지대학교 공지사항 알림'
-i = 0
+t = 0
 for title in url_list.keys():
-    total_message += make_message(result_list[i], title)
-    i += 1
+    total_message += make_message(result_list[t], title)
+    t += 1
+
 
 token = ''
 channal = '#test'
@@ -68,5 +71,3 @@ response = requests.post("https://slack.com/api/chat.postMessage",
                          data={"channel": channal, "text": total_message}
                          )
 print(f'{time} lambda executed.')
-print(f'result_list = {result_list}')
-print(f'total_message = {total_message}')
