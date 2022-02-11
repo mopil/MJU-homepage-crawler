@@ -9,7 +9,7 @@ chat_id = '@hu_homepage_crawler'
 def set_hu_driver(url):
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
-    driver = webdriver.Chrome('../chromedriver.exe', options=options)
+    driver = webdriver.Chrome('chromedriver.exe', options=options)
     driver.get(url)
 
     # additional action
