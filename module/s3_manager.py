@@ -1,7 +1,7 @@
 import boto3
 
 
-class S3BucketManager:
+class S3Manager:
     def __init__(self, id, key, bucket_name, file_name):
         self.file_name = file_name
         self.bucket_name = bucket_name
@@ -31,4 +31,14 @@ class S3BucketManager:
     def clear_file(self):
         self.write_file("", "w")
         print(f'{self.file_name} all data reset complete.')
+
+    def duplication_filtering(self, crawled_result):
+        filtered_result = []
+        stored_notice = self.read_file()  # stored_notice = type : str
+        for notice in crawled_result:
+            title = notice[0]
+            if title not in stored_notice:
+                self.write_file(title, "a")
+                filtered_result.append(notice)
+        return filtered_result
 
