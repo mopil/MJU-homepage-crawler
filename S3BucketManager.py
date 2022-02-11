@@ -2,9 +2,8 @@ import boto3
 
 
 class S3BucketManager:
-    def __init__(self, id, key, file_name, bucket_name):
+    def __init__(self, id, key, bucket_name):
         self.bucket_name = bucket_name
-        self.file_name = file_name
         self.s3 = boto3.resource(
             's3',
             aws_access_key_id=id,
@@ -17,24 +16,18 @@ class S3BucketManager:
             )
         print("s3 bucket successfully connected.")
 
-    def write_file(self, message):
-        with open(self.file_name, "a", encoding='utf-8') as f:
-            f.write("\n" + message)
-        print(f"[{self.file_name}] write(append) success.")
+    def write_file(self, file_name, message, mode):
+        with open(file_name, mode, encoding='utf-8') as f:
+            f.write(message + "\n")
+        self.client.upload_file(file_name, self.bucket_name, file_name)
 
-    def update_bucket(self):
-        self.client.upload_file(self.file_name, self.bucket_name, self.file_name)
-        print(f'bucket_name = {self.bucket_name}, file = {self.file_name} is successfully updated.')
-
-    def read_bucket(self):
-        obj = self.s3.Object(self.bucket_name, self.file_name)
+    def read_file(self, file_name):
+        obj = self.s3.Object(self.bucket_name, file_name)
         body = obj.get()["Body"].read()
-        print(f'bucket_name = {self.bucket_name}, file = {self.file_name} is successfully downloaded.')
+        #print(f'{file_name} is successfully read.')
         return body.decode()
 
-    def clear_bucket(self):
-        with open(self.file_name, "w") as f:
-            f.write("")
-        print(f"[{self.file_name}] all data cleared.")
-        self.update_bucket()
+    def clear_file(self):
+        self.write_file("tmp/store.txt", "", "w")
+        print('all data cleared.')
 
