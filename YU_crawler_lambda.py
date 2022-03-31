@@ -62,4 +62,3 @@ for title, url in arr.items():
     else:
         message += make_message(crawled_notice)
     total_message += message
-send_telegram('5285266759:AAEh8TdTywytRORumvwbRghC4K9ww-Upy20','@yu_homepage_crawler',total_message)
