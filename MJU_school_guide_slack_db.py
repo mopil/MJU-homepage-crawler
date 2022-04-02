@@ -3,30 +3,6 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
 
-host = ''
-port = 3306
-user = ''
-password = ''
-db = ''
-
-
-def make_message2(result, homepage_title):
-    today = datetime.today().strftime("%Y.%m.%d")
-    message = f'\n{homepage_title}'
-
-    message_exist = False
-    for notice in result:
-        try:
-            if notice[2] == today:
-                message += f'\n{notice[0]}\n{notice[1]}\n'
-                message_exist = True
-        except IndexError:
-            pass
-    if not message_exist:
-        message += "\n새 글이 없습니다.\n"
-
-    return message
-
 
 def make_message(result, homepage_title):
     message = f'\n{homepage_title}'
@@ -38,10 +14,8 @@ def make_message(result, homepage_title):
             message_exist = True
         except IndexError:
             pass
-    if not message_exist:
-        message += "\n새 글이 없습니다.\n"
 
-    return message
+    return message, message_exist
 
 
 def crawling_school_notice(url):
@@ -71,25 +45,26 @@ def crawling_school_notice(url):
 def lambda_handler(event, context):
     # main logic
     url_list = {
-        "◎학사 공지◎": 'http://www.mju.ac.kr/mjukr/257/subview.do',
-        "◎일반 공지◎": 'http://www.mju.ac.kr/mjukr/255/subview.do',
-        "◎장학 공지◎": 'http://www.mju.ac.kr/mjukr/259/subview.do',
+        "학사": 'http://www.mju.ac.kr/mjukr/257/subview.do',
+        "일반": 'http://www.mju.ac.kr/mjukr/255/subview.do',
+        "장학": 'http://www.mju.ac.kr/mjukr/259/subview.do',
     }
 
     result_list = []
-    for url in url_list.values():
+    for category, url in url_list.items():
         crawled_list = crawling_school_notice(url)
-        result_list.append(db_check(crawled_list))
+        result_list.append(db_check(category, crawled_list))
     total_message = f'{datetime.today().strftime("%Y-%m-%d")} 명지대학교 공지사항 알림'
-    t = 0
+    t, message_check = 0, 0
     for title in url_list.keys():
-        try:
-            total_message += make_message(result_list[t], title)
+        temp_message, message_result = make_message(result_list[t], title)
+        if message_result:
+            total_message += temp_message
             t += 1
-        except IndexError:
-            pass
+        else:
+            message_check += 1
 
-    if t != 3:
+    if message_check != 3:
         token = ''
         channal = '#test'
 
@@ -98,6 +73,8 @@ def lambda_handler(event, context):
                                  data={"channel": channal, "text": total_message}
                                  )
         print('lambda executed.')
+    else:
+        print("no new articles ")
 
 
 def in_db(title, result_from_db):
@@ -107,7 +84,7 @@ def in_db(title, result_from_db):
     return False
 
 
-def db_check(crawled_list):
+def db_check(category, crawled_list):
     database = pymysql.connect(
         host=host,
         port=port,
@@ -118,7 +95,9 @@ def db_check(crawled_list):
     cursor = database.cursor()
 
     # 데이터베이스에서 데이터 전체 조회
-    cursor.execute("SELECT title FROM announcement")
+    today = datetime.today().strftime("%Y-%m-%d")
+    cursor.execute(f"SELECT title FROM announcement")
+
     database.commit()
     result_from_db = cursor.fetchall()
 
@@ -126,9 +105,10 @@ def db_check(crawled_list):
     for data in crawled_list:
         title = data[0]
         if not in_db(title, result_from_db):
-            insert_sql = f"INSERT INTO announcement(title) VALUES ('{title}');"
-            cursor.execute(insert_sql)
+            insert_sql = f"INSERT INTO announcement(category, title) VALUES (%s, %s);"
+            insert_data = (category, title)
+            cursor.execute(insert_sql, insert_data)
             final_result.append(data)
-    database.commit()
+            database.commit()
     return final_result
 
